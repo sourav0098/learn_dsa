@@ -28,6 +28,24 @@ public class Main {
 		return result;
 	}
 
+	public int binaryToDecimal(int binary) {
+		int i = 0;
+		int result = 0;
+
+		while (binary != 0) {
+			// Since it already a binary number so to get last digit find modulus of 10
+			int lastBit = binary % 10;
+			if (lastBit == 1) {
+				result = result + (int) Math.pow(2, i);
+			}
+
+			// Update binary divide by 10 to remove last digit
+			binary = binary / 10;
+			i++;
+		}
+		return result;
+	}
+
 	// FIND ODD OR EVEN (Use bitwise operator)
 	// If u convert any decimal number to bits u will find that even no. always end
 	// with 0 and odd number with 1 so we can use this concept to find odd or even
@@ -57,6 +75,40 @@ public class Main {
 		return result;
 	}
 
+	// Reverse Integer
+	public int reverseInteger(int x) {
+		int result = 0;
+		while (x != 0) {
+			int lastDigit = x % 10;
+
+			// Here we want to check if multiplication of result by 10 will overflow the
+			// value outside of int range so we check result*10<MIN_VALUE but since
+			// multiplication will cause to overflow the value so we move 10 under MIN_VALUE
+			// (MIN_VALUE/10) since it is same thing
+			if (result < Integer.MIN_VALUE / 10 || result > Integer.MAX_VALUE / 10) {
+				return 0;
+			}
+			result = result * 10 + lastDigit;
+			x = x / 10;
+		}
+		return result;
+	}
+
+	// Check if number is power of two
+	public boolean isPowerOfTwo(int num) {
+		if (num < 0) {
+			return false;
+		}
+		while (num != 0) {
+			int lastBit = num & 1;
+			num = num >> 1;
+			if (lastBit == 1 && num != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	// Given an integer n, return an array ans of length n + 1 such that for each i
 	// (0 <= i <= n), ans[i] is the number of 1's in the binary representation of i
 	public int[] countBits(int n) {
@@ -76,8 +128,10 @@ public class Main {
 		Main obj1 = new Main();
 		System.out.println(obj1.decimalToBinary(10));
 		System.out.println(obj1.decimalToBinaryUsingBitWise(10));
+		System.out.println(obj1.binaryToDecimal(1000));
 		System.out.println(obj1.oddOrEven(11));
 		System.out.println(obj1.countOneBits(7));
+		System.out.println(obj1.reverseInteger(2147483645));
 	}
 
 }
