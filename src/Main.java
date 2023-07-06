@@ -235,6 +235,19 @@ public class Main {
 		return n * factorail(n - 1);
 	}
 
+	// x to power n
+	public int powerOf(int x, int n) {
+		if (n == 0) {
+			return 1;
+		}
+		if(n==1) {
+			return x;
+		}
+		
+		
+		return x * (powerOf(x, n-1));
+	}
+
 	public static void main(String[] args) {
 		Main obj1 = new Main();
 		System.out.println(obj1.decimalToBinary(10));
@@ -245,5 +258,6 @@ public class Main {
 		System.out.println(obj1.reverseInteger(2147483645));
 		System.out.println(obj1.isPrime(23));
 		System.out.println(obj1.factorail(1));
+		System.out.println(obj1.powerOf(2, 4));
 	}
 }
