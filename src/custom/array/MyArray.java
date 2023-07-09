@@ -11,6 +11,16 @@ public class MyArray {
 	}
 
 	public void insert(int num) {
+
+		// dynamically increase size of array
+		if (currentIndex == items.length) {
+			int[] temp = new int[items.length + 10];
+			for (int i = 0; i < currentIndex; i++) {
+				temp[i] = items[i];
+			}
+			items = temp;
+		}
+
 		items[currentIndex] = num;
 		currentIndex++;
 	}
