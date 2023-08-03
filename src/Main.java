@@ -5,10 +5,14 @@ import java.util.Arrays;
 // OR |
 // NOT ~
 // XOR ^
+
+// << Left shift
+// >> Right shift
 public class Main {
 	// decimal to binary
 	public String decimalToBinary(int num) {
 		String result = "";
+		// until number is zero take remainder and prepend in string
 		while (num > 0) {
 			int rem = num % 2;
 			num = num / 2;
@@ -25,7 +29,6 @@ public class Main {
 			num = num >> 1;
 			result = lastBit + result;
 		}
-
 		return result;
 	}
 
@@ -76,6 +79,20 @@ public class Main {
 		return result;
 	}
 
+	public int missingNumber(int[] nums) {
+		int result = nums.length;
+		// for this we are going to use XOR operator 
+		// when we do 5^5 ==> 0
+		// when we do 0^4 ==> 0
+		// so we can XOR all the nums and find the missing one
+		
+		for (int i = 0; i < nums.length; i++) {
+			// 0 ^ 1 ^ 2 ^ 3^ 4 (because of i) ^ 3 ^ 0 ^ 1 (from nums[]) ==> 2
+			result ^= nums[i] ^ i;
+		}
+		return result;
+	}
+
 	// Reverse Integer
 	public int reverseInteger(int x) {
 		int result = 0;
@@ -113,6 +130,19 @@ public class Main {
 			}
 		}
 		return true;
+	}
+
+	public int getSum(int a, int b) {
+		int carry = 0;
+		while (b != 0) {
+			// with XOR we can add the values 1,0 ==> 1 but for 1,1 ==> 0 we need a carry
+			// value of 1 on left bit for that we can & operator since only 1,1 ==> 1 is
+			// possible with & operator
+			carry = (a & b) << 1;
+			a = a ^ b;
+			b = carry;
+		}
+		return a;
 	}
 
 	// Given an integer n, return an array ans of length n + 1 such that for each i
@@ -179,6 +209,9 @@ public class Main {
 			return false;
 		}
 
+		// the step size is 2 since, we dont want even numbers
+		// i<=n/2 because the biggest number that it can be divisible by, should be n/2
+		// ==> 14/2 = 7 (biggest)
 		for (int i = 3; i <= n / 2; i += 2) {
 			if (n % i == 0) {
 				return false;
@@ -203,6 +236,7 @@ public class Main {
 	// 7. Continue the same till last number
 
 	public int countPrime(int n) {
+		// 0 - 10 ==> 11 numbers
 		boolean primes[] = new boolean[n + 1];
 
 		// make all the number true
@@ -210,13 +244,15 @@ public class Main {
 
 		// mark 0 and 1 as false
 		primes[0] = false;
-		primes[1] = false;
+		if (primes.length >= 2) {
+			primes[1] = false;
+		}
 
 		int count = 0;
 		for (int i = 0; i < n; i++) {
 			if (primes[i]) {
 				count++;
-				// make j=2*i since multiple of any number of will atleast start from 2*i ==>
+				// make j=2*i since multiple of any number of will at least start from 2*i ==>
 				// eg: 5*2 = 10
 				// jump by j+i to find multiples
 				for (int j = 2 * i; j < n; j = j + i) {
@@ -240,12 +276,11 @@ public class Main {
 		if (n == 0) {
 			return 1;
 		}
-		if(n==1) {
+		if (n == 1) {
 			return x;
 		}
-		
-		
-		return x * (powerOf(x, n-1));
+
+		return x * (powerOf(x, n - 1));
 	}
 
 	public static void main(String[] args) {
@@ -255,7 +290,7 @@ public class Main {
 		System.out.println(obj1.binaryToDecimal(1000));
 		System.out.println(obj1.oddOrEven(11));
 		System.out.println(obj1.countOneBits(7));
-		System.out.println(obj1.reverseInteger(2147483645));
+		System.out.println(obj1.reverseInteger(5007));
 		System.out.println(obj1.isPrime(23));
 		System.out.println(obj1.factorail(1));
 		System.out.println(obj1.powerOf(2, 4));
