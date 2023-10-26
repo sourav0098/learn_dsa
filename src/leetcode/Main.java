@@ -1,8 +1,13 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 public class Main {
@@ -185,6 +190,9 @@ public class Main {
 				int temp = nums[i];
 				nums[i] = nums[p1];
 				nums[p1] = temp;
+			}
+
+			if (nums[p1] != 0) {
 				p1++;
 			}
 		}
@@ -220,9 +228,9 @@ public class Main {
 		// }
 
 		// 2) reverse approach --> S.C ==> O(1)
-		// We need to use modulus to make k within array length lets say array size is 2
+		// We need to use modulus to make k within array length lets say array size is 5
 
-		// but k is 200 (bigger than array length) then % will make (200 % 2 = 2)
+		// but k is 200 (bigger than array length ==> 5) then % will make (200 % 5 = 0)
 		k = k % nums.length;
 		// reverse whole array
 		reverse(0, nums.length - 1, nums);
@@ -238,10 +246,11 @@ public class Main {
 	 * of positions (including zero). Otherwise, return false. There may be
 	 * duplicates in the original array. Note: An array A rotated by x positions
 	 * results in an array B of the same length such that A[i] == B[(i+x) %
-	 * A.length], where % is the modulo operation. Input: nums = [3,4,5,1,2] Output:
-	 * true Explanation: [1,2,3,4,5] is the original sorted array. You can rotate
-	 * the array by x = 3 positions to begin on the the element of value 3:
-	 * [3,4,5,1,2].
+	 * A.length], where % is the modulo operation.
+	 * 
+	 * Input: nums = [3,4,5,1,2] Output: true Explanation: [1,2,3,4,5] is the
+	 * original sorted array. You can rotate the array by x = 3 positions to begin
+	 * on the the element of value 3: [3,4,5,1,2].
 	 **/
 
 	public boolean check(int[] nums) {
@@ -401,7 +410,8 @@ public class Main {
 		int result = Integer.MIN_VALUE;
 
 		for (int i = 0; i < nums.length; i++) {
-			// if at any time prefix or suffix becomes 0 (multiplication with 0) turn it to 1
+			// if at any time prefix or suffix becomes 0 (multiplication with 0) turn it to
+			// 1
 			if (prefix == 0)
 				prefix = 1;
 			if (suffix == 0)
@@ -416,33 +426,22 @@ public class Main {
 		}
 		return result;
 	}
+
 	/**
-	  	BREAKDOWN
-	 
-		i = 0
-		prefix = 1 * 2 = 2
-		suffix = 1 * 4 = 4
-		result = max(Integer.MIN_VALUE, max(2, 4)) = 4
-		nums = [2, 3, -2, 4]
-
-		i = 1
-		prefix = 2 * 3 = 6
-		suffix = 4 * (-2) = -8
-		result = max(4, max(6, -8)) = 6
-		nums = [2, 3, -2, 4]
-
-		i = 2
-		prefix = 6 * (-2) = -12
-		suffix = (-8) * 3 = -24
-		result = max(6, max(-12, -24)) = 6
-		nums = [2, 3, -2, 4]
-
-		i = 3
-		prefix = -12 * 4 = -48
-		suffix = (-24) * 2 = -48
-		result = max(6, max(-48, -48)) = 6
-		nums = [2, 3, -2, 4]
-	**/ 	
+	 * BREAKDOWN
+	 * 
+	 * i = 0 prefix = 1 * 2 = 2 suffix = 1 * 4 = 4 result = max(Integer.MIN_VALUE,
+	 * max(2, 4)) = 4 nums = [2, 3, -2, 4]
+	 * 
+	 * i = 1 prefix = 2 * 3 = 6 suffix = 4 * (-2) = -8 result = max(4, max(6, -8)) =
+	 * 6 nums = [2, 3, -2, 4]
+	 * 
+	 * i = 2 prefix = 6 * (-2) = -12 suffix = (-8) * 3 = -24 result = max(6,
+	 * max(-12, -24)) = 6 nums = [2, 3, -2, 4]
+	 * 
+	 * i = 3 prefix = -12 * 4 = -48 suffix = (-24) * 2 = -48 result = max(6,
+	 * max(-48, -48)) = 6 nums = [2, 3, -2, 4]
+	 **/
 
 //	Suppose an array of length n sorted in ascending order is rotated between 1 and n times. 
 //	Given the sorted rotated array nums of unique elements, return the minimum element of this array.
@@ -450,31 +449,313 @@ public class Main {
 //	Input: nums = [4,5,6,7,0,1,2]
 //	Output: 0
 	public int findMin(int[] nums) {
-        // USING BINARY SEARCH
-        int left=0;
-        int right=nums.length-1;
-        
-        while(left<right){
-            int mid=(left+right)/2;
+		// USING BINARY SEARCH
+		int left = 0;
+		int right = nums.length - 1;
 
-            // case1: if nums[mid] is the answer
-            if(nums[mid-1]>nums[mid]){
-                return nums[mid];
-            }
+		while (left < right) {
+			int mid = (left + right) / 2;
 
-            // check which is unsorted side because we want to go on that side
-            // if left number is smaller than mid number then left side is sorted (move left position to mid+1)
-            else if(nums[left]<nums[mid] && nums[mid]>nums[right]){
-                left=mid+1;
-            }
-            // otherwise right is sorted (move right pos to mid-1)
-            else{
-                right=mid-1;
-            }
-        }
-        return nums[left];
-    }
-	
+			// case1: if nums[mid] is the answer
+			// also check if mid > 0
+			if (mid > 0 && nums[mid - 1] > nums[mid]) {
+				return nums[mid];
+			}
+
+			// check which is unsorted side because we want to go on that side
+			// if left number is smaller than mid number then left side is sorted (move left
+			// position to mid+1)
+
+			// check if left side is sorted
+			else if (nums[left] <= nums[mid] && nums[mid] >= nums[right]) {
+				left = mid + 1;
+			}
+			// if right is sorted (move right pos to mid-1)
+			else {
+				right = mid - 1;
+			}
+		}
+		return nums[left];
+	}
+
+//	Search in Rotated Sorted Array with Distinct Numbers (return index)
+//	Input: nums = [4,5,6,7,0,1,2], target = 0
+//	Output: 4
+	public int search(int[] nums, int target) {
+		int left = 0;
+		int right = nums.length - 1;
+
+		while (left <= right) {
+			// find midpoint
+			int mid = (left + right) / 2;
+
+			// if mid==target, u got the answer return mid
+			if (nums[mid] == target) {
+				return mid;
+			}
+			// If the left side is sorted
+			else if (nums[left] <= nums[mid]) {
+				// Check if the target is in the right half
+				if (target > nums[mid] || target < nums[left]) {
+					// Target is greater than mid or less than left, so it is in right half
+					left = mid + 1;
+				} else {
+					// otherwise it is in left half
+					right = mid - 1;
+				}
+			}
+			// If the right side is sorted
+			else {
+				// Check if the target is in the left half
+				if (target < nums[mid] || target > nums[right]) {
+					// Target is less than mid or greater than right, so it is in left half
+					right = mid - 1;
+				} else {
+					// otherwise it is in right left
+					left = mid + 1;
+				}
+			}
+		}
+
+		// If the target is not found, return -1
+		return -1;
+	}
+
+//	Kth smallest element
+	public static int kthSmallest(int[] arr, int l, int r, int k) {
+		// for max priority queue, we need to add Comparator.reverseOrder()
+		PriorityQueue<Integer> queue = new PriorityQueue<Integer>(Comparator.reverseOrder());
+
+		// add in queue
+		for (int i = 0; i < arr.length; i++) {
+			queue.offer(arr[i]);
+
+			// if size of queue goes greater than k, poll from queue(it will remove max
+			// element), so that we only have k element in queue
+			// and the top element will be kth smallest element
+			if (queue.size() > k) {
+				queue.poll();
+			}
+		}
+
+		return queue.peek();
+	}
+
+	public static int doUnion(int a[], int n, int b[], int m) {
+		HashSet<Integer> set = new HashSet<>();
+
+		for (int i = 0; i < n; i++) {
+			set.add(a[i]);
+		}
+		for (int j = 0; j < m; j++) {
+			set.add(b[j]);
+		}
+		return set.size();
+	}
+
+	/**
+	 * Given an array A[ ] of positive integers of size N, where each value
+	 * represents the number of chocolates in a packet. Each packet can have a
+	 * variable number of chocolates. There are M students, the task is to
+	 * distribute chocolate packets among M students such that : 1. Each student
+	 * gets exactly one packet. 2. The difference between maximum number of
+	 * chocolates given to a student and minimum number of chocolates given to a
+	 * student is minimum.
+	 * 
+	 * N = 8, M = 5 A = {3, 4, 1, 9, 56, 7, 9, 12} Output: 6 Explanation: The
+	 * minimum difference between maximum chocolates and minimum chocolates is 9 - 3
+	 * = 6 by choosing following M packets :{3, 4, 9, 7, 9}
+	 */
+	public long findMinDiff(ArrayList<Integer> a, int n, int m) {
+		// sort array
+		Collections.sort(a);
+
+		int diff = Integer.MAX_VALUE;
+
+		// first we sort the values then once the values are sorted we need to check at
+		// what point the difference at start point
+		// and M(no of packets to be distributed) point is minimum and we need to slide
+		// those 2 points and find the min difference
+
+		// we need to make a sliding window of 0->m-1 then we just need to slide it and
+		// calculate the difference
+		for (int i = 0; i + m - 1 < n; i++) {
+			if (a.get(i + m - 1) - a.get(i) < diff) {
+				diff = a.get(i + m - 1) - a.get(i);
+			}
+		}
+		return diff;
+	}
+
+	/**
+	 * Given an integer array nums sorted in non-decreasing order, remove the
+	 * duplicates in-place such that each unique element appears only once. The
+	 * relative order of the elements should be kept the same. Then return the
+	 * number of unique elements in nums
+	 * 
+	 * Input: nums = [1,1,2] Output: 2, nums = [1,2,_] We need to make change in
+	 * same array
+	 */
+	public int removeDuplicates(int[] nums) {
+		// Take 2 pointer approach, make j at 0
+		int j = 0;
+
+		for (int i = 0; i < nums.length; i++) {
+			// If nums[i]!=nums[j] first we need to do j++ then nums[j]=nums[i]
+			if (nums[i] != nums[j]) {
+				j++;
+				nums[j] = nums[i];
+			}
+		}
+
+		// because length of j will be index+1
+		return j + 1;
+	}
+
+//	Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct
+	public boolean containsDuplicate(int[] nums) {
+		HashSet<Integer> set = new HashSet<>();
+		for (int i = 0; i < nums.length; i++) {
+			if (set.contains(nums[i])) {
+				return true;
+			} else {
+				set.add(nums[i]);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * You are given a large integer represented as an integer array digits, where
+	 * each digits[i] is the ith digit of the integer. The digits are ordered from
+	 * most significant to least significant in left-to-right order. The large
+	 * integer does not contain any leading 0's.
+	 * 
+	 * Input: digits = [1,2,3] Output: [1,2,4]
+	 * 
+	 * Input: digits = [9] Output: [1,0]
+	 */
+	public int[] plusOne(int[] digits) {
+		// use a for loop from end to start
+		for (int i = digits.length - 1; i >= 0; i--) {
+
+			// check if last digit is less than 9 then just increment it and return the
+			// array
+			if (digits[i] < 9) {
+				digits[i]++;
+				return digits;
+			}
+			// else make the digit 0 and then through for loop it will check again and
+			// increment
+			// the next digit
+			else {
+				digits[i] = 0;
+			}
+		}
+
+		// if all digits are 9 then create new array with first digit as 1 and rest 0
+		int[] ans = new int[digits.length + 1];
+		ans[0] = 1;
+		// rest will automatically be 0
+		return ans;
+	}
+
+	/**
+	 * Best Time to Buy and Sell Stock II You are given an integer array prices
+	 * where prices[i] is the price of a given stock on the ith day.
+	 * 
+	 * On each day, you may decide to buy and/or sell the stock. You can only hold
+	 * at most one share of the stock at any time. However, you can buy it then
+	 * immediately sell it on the same day.
+	 * 
+	 * Find and return the maximum profit you can achieve.
+	 * 
+	 * Input: prices = [7,1,5,3,6,4] Output: 7 Explanation: Buy on day 2 (price = 1)
+	 * and sell on day 3 (price = 5), profit = 5-1 = 4.
+	 */
+	public int maxProfit2(int[] prices) {
+		// set profit to 0
+		int profit = 0;
+
+		for (int i = 0; i < prices.length - 1; i++) {
+
+			// if profit is being seen between 2 consecutive days then calculate it and add
+			// in profit
+			if (prices[i + 1] > prices[i]) {
+				profit += prices[i + 1] - prices[i];
+			}
+		}
+		return profit;
+	}
+
+	/**
+	 * Given an array A of positive integers. Your task is to find the leaders in
+	 * the array. An element of array is leader if it is greater than or equal to
+	 * all the elements to its right side. The rightmost element is always a leader.
+	 * 
+	 * n = 6 A[] = {16,17,4,3,5,2} Output: 17 5 2
+	 */
+	public ArrayList<Integer> leaders(int arr[], int n) {
+		ArrayList<Integer> leaders = new ArrayList<>();
+		// take a pointer from end
+		int p1 = n - 1;
+
+		// start for loop in reverse order
+		for (int i = n - 1; i >= 0; i--) {
+			// check if at any point we got a bigger number than previous leader we got a
+			// new one and we need to update p1 as well
+			if (arr[i] >= arr[p1]) {
+				leaders.add(arr[i]);
+				p1 = i;
+			}
+		}
+		// reverse the list so we can maintain the order in which they appear we are
+		// running a reverse for loop
+		Collections.reverse(leaders);
+		return leaders;
+	}
+
+	/**
+	 * Given an unsorted array of integers nums,return the length of the longest
+	 * consecutive elements sequence.You must write an algorithm that runs in O(n)
+	 * time. Input: nums = [0,3,7,2,5,8,4,6,0,1]
+	 * Output: 9
+	 */
+	public int longestConsecutive(int[] nums) {
+		// to count consecutive sequence
+		int count = 1;
+
+		// to store max sequence
+		int max = 0;
+
+		// sort array
+		Arrays.sort(nums);
+
+		// if length == 0 return 0
+		if (nums.length == 0) {
+			return 0;
+		}
+
+		// loop from 0->length-1
+		for (int i = 0; i < nums.length - 1; i++) {
+			// if not equal then check if difference is 1
+			if (nums[i + 1] != nums[i]) {
+				// if diff is 1 count ++
+				if (nums[i + 1] - nums[i] == 1) {
+					count++;
+				} else {
+					// reset count and just find maximum between count and max
+					max = Math.max(max, count);
+					count = 1;
+				}
+			}
+
+		}
+		return Math.max(max, count);
+	}
+
+	// First Missing Positive
+
 	public static void main(String args[]) {
 
 	}
