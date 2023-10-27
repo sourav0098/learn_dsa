@@ -29,6 +29,7 @@ public class Main {
 	 * order doesn't matter in performing XOR operation. eg, 2^3^4^6 = 3^2^6^4 =
 	 * 4^2^6^3 ......
 	 * 
+	 * 
 	 * So, using these three properties of XOR , we will solve the question.
 	 **/
 	public int singleNumber(int[] nums) {
@@ -718,8 +719,7 @@ public class Main {
 	/**
 	 * Given an unsorted array of integers nums,return the length of the longest
 	 * consecutive elements sequence.You must write an algorithm that runs in O(n)
-	 * time. Input: nums = [0,3,7,2,5,8,4,6,0,1]
-	 * Output: 9
+	 * time. Input: nums = [0,3,7,2,5,8,4,6,0,1] Output: 9
 	 */
 	public int longestConsecutive(int[] nums) {
 		// to count consecutive sequence
@@ -754,7 +754,54 @@ public class Main {
 		return Math.max(max, count);
 	}
 
+	/**
+	 * Given an integer array nums and an integer val, remove all occurrences of val
+	 * in nums in-place. The order of the elements may be changed. Then return the
+	 * number of elements in nums which are not equal to val.
+	 * 
+	 * Input: nums = [3,2,2,3], val = 3 Output: 2, nums = [2,2,_,_]
+	 */
+	public int removeElement(int[] nums, int val) {
+		int j = 0;
+		for (int i = 0; i < nums.length; i++) {
+			// if num[i] is not equal to val then move it to front
+			if (nums[i] != val) {
+				nums[j] = nums[i];
+				j++;
+			}
+		}
+		return j;
+	}
+
+	/**
+	 * Given a sorted array of distinct integers and a target value, return the
+	 * index if the target is found. If not, return the index where it would be if
+	 * it were inserted in order.
+	 * 
+	 * Input: nums = [1,3,5,6], target = 5 Output: 2
+	 */
+	public int searchInsert(int[] nums, int target) {
+		// USE BINARY SEARCH
+		int left = 0;
+		int right = nums.length - 1;
+
+		while (left <= right) {
+			int mid = (left + right) / 2;
+
+			if (nums[mid] == target) {
+				return mid;
+			} else if (nums[mid] < target) {
+				left = mid + 1;
+			} else {
+				right = mid - 1;
+			}
+		}
+		// if number not found, then return expected place
+		return left;
+	}
+
 	// First Missing Positive
+	// Climbing Stairs
 
 	public static void main(String args[]) {
 
